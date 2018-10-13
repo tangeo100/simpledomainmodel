@@ -108,50 +108,72 @@ open class Job {
 ////////////////////////////////////
 // Person
 //
-//open class Person {
-//  open var firstName : String = ""
-//  open var lastName : String = ""
-//  open var age : Int = 0
-//
-//  fileprivate var _job : Job? = nil
-//  open var job : Job? {
-//    get { }
-//    set(value) {
-//    }
-//  }
-//
-//  fileprivate var _spouse : Person? = nil
-//  open var spouse : Person? {
-//    get { }
-//    set(value) {
-//    }
-//  }
-//
-//  public init(firstName : String, lastName: String, age : Int) {
-//    self.firstName = firstName
-//    self.lastName = lastName
-//    self.age = age
-//  }
-//
-//  open func toString() -> String {
-//  }
-//}
+open class Person {
+  open var firstName : String = ""
+  open var lastName : String = ""
+  open var age : Int = 0
+
+  fileprivate var _job : Job? = nil
+  open var job : Job? {
+    get { return self._job }
+    set(value) {
+        if(age >= 16) {
+            self._job = value
+        }
+    }
+  }
+
+  fileprivate var _spouse : Person? = nil
+  open var spouse : Person? {
+    get { return self._spouse }
+    set(value) {
+        if(age >= 18) {
+            self._spouse = value
+        }
+    }
+  }
+
+  public init(firstName : String, lastName: String, age : Int) {
+    self.firstName = firstName
+    self.lastName = lastName
+    self.age = age
+  }
+
+  open func toString() -> String {
+    let ans = "[Person: firstName:\(firstName) lastName:\(lastName) age:\(age) job:\(String(describing: job)) spouse:\(String(describing: spouse))]"
+    return ans
+  }
+}
 
 ////////////////////////////////////
 // Family
 //
-//open class Family {
-//  fileprivate var members : [Person] = []
-//  
-//  public init(spouse1: Person, spouse2: Person) {
-//  }
-//  
-//  open func haveChild(_ child: Person) -> Bool {
-//  }
-//  
-//  open func householdIncome() -> Int {
-//  }
-//}
+open class Family {
+  fileprivate var members : [Person] = []
+  
+  public init(spouse1: Person, spouse2: Person) {
+    members.append(spouse1)
+    members.append(spouse2)
+  }
+  
+  open func haveChild(_ child: Person) -> Bool {
+    if(members[0].age > 21 || members[1].age > 21){
+        members.append(child)
+        return true
+    }
+    return false
+  }
+  
+  open func householdIncome() -> Int {
+    var total : Int = 0
+    for person in members {
+        if(person.job != nil){
+            total += (person.job?.calculateIncome(2000))!
+        }
+    }
+    return total
+  }
+}
 
 
 
